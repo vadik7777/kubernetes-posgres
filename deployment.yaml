@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  namespace: postgres
+  labels:
+    app: postgres
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres/postgres:15.1-alpine
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: config-env
+            - secretRef:
+                name: secret-env
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 200m
+              memory: 300Mi
+          ports:
+            - containerPort: 5432
+              name: postgres
+              protocol: TCP
+          volumeMounts:
+            - name: config-initdb
+              mountPath: /docker-entrypoint-initdb.d/
+            - name: db-data
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: config-initdb
+          configMap:
+            name: config-initdb
+        - name: config-env
+          configMap:
+            name: config-env
+        - name: secret-env
+          secret:
+            secretName: secret-env
+        - name: db-data
+          persistentVolumeClaim:
+            claimName: db-data
