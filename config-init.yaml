@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: config-initdb
+  name: config-init
   namespace: postgres
 data:
   init.sql: |
