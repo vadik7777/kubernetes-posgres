@@ -4,7 +4,7 @@ metadata:
   name: config-initdb
   namespace: postgres
 data:
-  initdb: |
+  init.sql: |
     CREATE TABLE vault_kv_store (
       parent_path TEXT COLLATE "C" NOT NULL,
       path        TEXT COLLATE "C",

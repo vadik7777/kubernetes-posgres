@@ -37,14 +37,14 @@ spec:
               name: postgres
               protocol: TCP
           volumeMounts:
-            - name: config-initdb
+            - name: config-init
               mountPath: /docker-entrypoint-initdb.d/
             - name: db-data
               mountPath: /var/lib/postgresql/data
       volumes:
-        - name: config-initdb
+        - name: config-init
           configMap:
-            name: config-initdb
+            name: config-init
         - name: config-env
           configMap:
             name: config-env
